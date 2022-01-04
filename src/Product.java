@@ -1,9 +1,9 @@
 public class Product {
     private String productName;
-    private int price;
+    private double price;
     private boolean isInStock;
 
-    public Product(String productName, int price, boolean isInStock) {
+    public Product(String productName, double price, boolean isInStock) {
         this.productName = productName;
         this.price = price;
         this.isInStock = isInStock;
@@ -17,11 +17,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

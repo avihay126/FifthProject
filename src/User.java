@@ -3,14 +3,16 @@ public abstract class User {
     private String lastName;
     private String userName;
     private String password;
-    private double amountOfDiscount;
 
-    public User(String firstName, String lastName, String userName, String password,double amountOfDiscount) {
+
+    public User(String firstName, String lastName, String userName, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
-        this.amountOfDiscount=amountOfDiscount;
+    }
+    public User(){
+
     }
 
     public String getFirstName() {
@@ -43,13 +45,6 @@ public abstract class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-    public double getAmountOfDiscount() {
-        return amountOfDiscount;
-    }
-
-    public void setAmountOfDiscount(double amountOfDiscount) {
-        this.amountOfDiscount = amountOfDiscount;
     }
 
     public String toString(){

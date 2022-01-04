@@ -1,10 +1,12 @@
 public class Costumer extends User{
-     private boolean isVip;
+    private boolean isVip;
 
-
-    public Costumer(String firstName, String lastName, String userName, String password,double amountOfDiscount, boolean isVip) {
-        super(firstName, lastName, userName, password,amountOfDiscount);
+    public Costumer(String firstName, String lastName, String userName, String password, boolean isVip) {
+        super(firstName, lastName, userName, password);
         this.isVip = isVip;
+    }
+    public Costumer(){
+
     }
 
     public boolean isVip() {
