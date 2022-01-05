@@ -1,4 +1,3 @@
-import javax.print.MultiDocPrintService;
 import java.util.Scanner;
 
 public class Store {
@@ -15,8 +14,8 @@ public class Store {
 
     public void createUser(){
         User user=workerOrCostumer();
-        String firstName=firstName();
-        String lastName=lastName();
+        String firstName= fullName("First name: ");
+        String lastName=fullName("Last name: ");
         String userName=userName();
         String password=password();
         if (user instanceof Worker){
@@ -46,23 +45,14 @@ public class Store {
         }
         return user;
     }
-    private String firstName(){
+    private String fullName(String print){
         Scanner scanner=new Scanner(System.in);
-        String firstName;
+        String name;
         do {
-            System.out.print("First name: ");
-            firstName=scanner.nextLine();
-        }while (!isString(firstName));
-        return firstName;
-    }
-    private String lastName(){
-        Scanner scanner=new Scanner(System.in);
-        String lastName;
-        do {
-            System.out.print("Last name: ");
-            lastName=scanner.nextLine();
-        }while (!isString(lastName));
-        return lastName;
+            System.out.print(print);
+            name=scanner.nextLine();
+        }while (!isString(name));
+        return name;
     }
     private boolean isString(String str){
         boolean flag=true;
@@ -169,30 +159,50 @@ public class Store {
     public User login(){
         Scanner scanner=new Scanner(System.in);
         User user=workerOrCostumer();
-        System.out.print("UserName: ");
+        System.out.println("UserName: ");
         String userName = scanner.nextLine();
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
+        String password = password();
         for (int i = 0; i < this.users.length; i++) {
             if (this.users[i].getUserName().equals(userName) && this.users[i].getPassword().equals(password)) {
-                user = users[i];
+                if (user instanceof Worker&&this.users[i] instanceof Worker){
+                    user = this.users[i];
+                }else if (user instanceof Costumer&& this.users[i] instanceof Costumer){
+                    user = this.users[i];
+                }
             }
         }
         if (user.getUserName()==null) {
+            System.out.println("This user is not exist.");
             user=null;
         }else {
             if (user instanceof Worker) {
 
-            } else {
+            } else if (user instanceof Costumer){
+                System.out.println(user);
 
             }
         }
         return user;
     }
-    private User[] removeUserFromArray(User[] users,User user){
-        User[] newArray=new User[users.length-1];
-        for (int i=0;i<newArray.length;i++){
+    private void printAvailableProduct(){
+        if (this.products.length==0){
+            System.out.println("There is no products in stock");
+        }else {
+            int counter=0;
+            int productNumbering=1;
+            for (int i=0;i<this.products.length;i++){
+                if (this.products[i].isInStock()){
+                    System.out.println(productNumbering+"- "+this.products[i]);
+                    productNumbering++;
+                }else {
+                    counter++;
+                }
+            }
+            if (counter==this.products.length-1){
+                System.out.println("There is no products in stock");
+            }
 
         }
     }
+
 }
