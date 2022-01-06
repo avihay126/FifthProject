@@ -4,12 +4,20 @@ public class Store {
 
     private User[] users;
     private Product[]products;
+    private Cart[] carts;
 
     public final int INITIAL_SIZE_ARRAY=0, PASSWORD_MIN_SIZE=6;
 
     public Store() {
         this.users =new User[INITIAL_SIZE_ARRAY];
-        this.products = new Product[INITIAL_SIZE_ARRAY];
+        Product product1=new Product("bamba",10,true);
+        Product product2=new Product("bisli",5,false);
+        Product product3=new Product("pizza",20,true);
+        this.products = new Product[3];
+        this.products[0]=product1;
+        this.products[1]=product2;
+        this.products[2]=product3;
+        this.carts=new Cart[INITIAL_SIZE_ARRAY];
     }
 
     public void createUser(){
@@ -178,31 +186,78 @@ public class Store {
             if (user instanceof Worker) {
 
             } else if (user instanceof Costumer){
-                System.out.println(user);
+                loginToCostumer(user);
 
             }
         }
         return user;
     }
-    private void printAvailableProduct(){
-        if (this.products.length==0){
-            System.out.println("There is no products in stock");
-        }else {
-            int counter=0;
-            int productNumbering=1;
-            for (int i=0;i<this.products.length;i++){
-                if (this.products[i].isInStock()){
-                    System.out.println(productNumbering+"- "+this.products[i]);
-                    productNumbering++;
-                }else {
-                    counter++;
+    private void loginToCostumer(User user){
+        System.out.println(user);
+        chooseProduct(user);
+    }
+    private Product[] printAvailableProduct(){
+            Product[] availableProducts=this.products;
+            for (int i=0;i<availableProducts.length;i++){
+                if (!availableProducts[i].isInStock()) {
+                    availableProducts= removeProductFromArray(availableProducts,availableProducts[i]);
                 }
             }
-            if (counter==this.products.length-1){
-                System.out.println("There is no products in stock");
+            if (availableProducts.length==0){
+                System.out.println("There are no products in stock.");
+            }else {
+                for (int i=0;i<availableProducts.length;i++){
+                    System.out.println(i+1+"- "+availableProducts[i]);
+                }
+            }
+            return availableProducts;
+    }
+
+    private void chooseProduct(User user){
+        Scanner scanner=new Scanner(System.in);
+        boolean run =true;
+        int choose;
+        Cart cart =new Cart(user);
+        while (run) {
+            Product[] availableProducts = printAvailableProduct();
+            do {
+                System.out.println("Select a product to purchase,\n-1 to finish");
+                choose = scanner.nextInt();
+            } while (choose != -1 && (choose < 0 || choose > availableProducts.length));
+            if (choose==-1){
+                run=false;
+                System.out.println("The total price is"+cart.getTotalPrice()+"$");
+            }else {
+                choose--;
+                int numberOfProducts;
+                do {
+                    System.out.println("Select number of products.");
+                    numberOfProducts=scanner.nextInt();
+                }while (numberOfProducts<=0);
+                availableProducts[choose].addAmount(numberOfProducts);
+                cart.addProductToArray(availableProducts[choose]);
+                cart.addTotalPrice(cart.getTotalPrice()+(numberOfProducts*availableProducts[choose].getPrice()));
+                System.out.println(cart);
+
+
             }
 
         }
+
     }
+
+
+    private Product[] removeProductFromArray(Product[] products, Product product){
+        Product[] newArray=new Product[products.length-1];
+        int indexNewArray=0;
+        for (int i=0;i<products.length;i++){
+            if (products[i]!=product){
+                newArray[indexNewArray]=products[i];
+                indexNewArray++;
+            }
+        }
+        return newArray;
+    }
+
 
 }
