@@ -1,10 +1,10 @@
-public class Worker extends User{
+public class Worker extends Costumer{
 
     private String rank;
     private double amountOfDiscount;
 
-    public Worker(String firstName, String lastName, String userName, String password,double amountOfDiscount,String rank) {
-        super(firstName, lastName, userName, password);
+    public Worker(String firstName, String lastName, String userName, String password,boolean isVip,double amountOfDiscount,String rank) {
+        super(firstName, lastName, userName, password,isVip);
         this.rank=rank;
         this.amountOfDiscount=amountOfDiscount;
     }
@@ -27,6 +27,6 @@ public class Worker extends User{
     }
 
     public String toString(){
-        return super.toString()+"("+this.rank+")";
+        return getFirstName()+" "+getLastName()+" ("+this.rank+")!";
     }
 }

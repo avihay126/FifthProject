@@ -5,11 +5,13 @@ public abstract class User {
     private String password;
 
 
+
     public User(String firstName, String lastName, String userName, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.userName = userName;
         this.password = password;
+
     }
     public User(){
 
@@ -47,7 +49,8 @@ public abstract class User {
         this.password = password;
     }
 
+
     public String toString(){
-        return "Hello "+this.firstName+" "+this.lastName;
+        return this.firstName+" "+this.lastName;
     }
 }

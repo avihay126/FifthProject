@@ -22,7 +22,16 @@ public class Main {
                     store.createUser();
                     break;
                 case 2:
-                    store.login();
+                    User user= store.login();
+                    if (user.getUserName()==null) {
+                        System.out.println("This user is not exist.");
+                    }else {
+                        if (user instanceof Worker) {
+                            store.loginToWorker(user);
+                        } else if (user instanceof Costumer){
+                            store.loginToCostumer(user);
+                        }
+                    }
                     break;
                 case 3:
                     runLoop = false;

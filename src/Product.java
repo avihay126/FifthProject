@@ -2,12 +2,14 @@ public class Product {
     private String productName;
     private double price;
     private boolean isInStock;
+    private double vipDiscount;
     private int amount;
 
-    public Product(String productName, double price, boolean isInStock) {
+    public Product(String productName, double price,double vipDiscount) {
         this.productName = productName;
         this.price = price;
-        this.isInStock = isInStock;
+        this.vipDiscount=vipDiscount;
+        this.isInStock = true;
 
     }
 
@@ -36,6 +38,14 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public double getVipDiscount() {
+        return vipDiscount;
+    }
+
+    public void setVipDiscount(double vipDiscount) {
+        this.vipDiscount = vipDiscount;
     }
 
     public boolean isInStock() {
