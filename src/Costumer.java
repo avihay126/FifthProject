@@ -1,7 +1,10 @@
-public class Costumer extends User{
+import java.util.Date;
+
+public class Costumer extends User implements PrintHello{
     private boolean isVip;
     private int numberOfPurchase;
     private double sumPurchase;
+    private Date dateOfLastPurchase;
 
 
 
@@ -44,8 +47,23 @@ public class Costumer extends User{
     public void addSumOfPurchase(int sumToAdd){
         this.sumPurchase+=sumToAdd;
     }
+    public Date getDateOfLstPurchase() {
+        return dateOfLastPurchase;
+    }
+
+    public void setDateOfLstPurchase(Date dateOfLstPurchase) {
+        this.dateOfLastPurchase = dateOfLstPurchase;
+    }
+
+    @Override
+    public void printHello() {
+        System.out.println("Hello "+getFirstName()+" "+getLastName()+(this.isVip? " (VIP)":". "));
+    }
 
     public String toString(){
-        return super.toString()+(this.isVip? " (VIP)":".");
+        return super.toString()+(this.isVip? " (VIP)":". ")+"\n" +
+                "Number of purchases: "+this.numberOfPurchase+"\n" +
+                "Sum of all purchases: "+this.sumPurchase+"\n" +
+                "Last purchase date: "+this.dateOfLastPurchase;
     }
 }

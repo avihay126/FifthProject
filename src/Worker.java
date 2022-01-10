@@ -1,4 +1,4 @@
-public class Worker extends Costumer{
+public class Worker extends Costumer implements PrintHello{
 
     private String rank;
     private double amountOfDiscount;
@@ -25,8 +25,11 @@ public class Worker extends Costumer{
     public void setAmountOfDiscount(double amountOfDiscount) {
         this.amountOfDiscount = amountOfDiscount;
     }
+    public void printHello(){
+        System.out.println("Hello "+getFirstName()+" "+getLastName()+" ("+this.rank+")!");
+    }
 
     public String toString(){
-        return getFirstName()+" "+getLastName()+" ("+this.rank+")!";
+        return super.toString()+"\n("+this.rank+")!";
     }
 }
