@@ -1,6 +1,8 @@
 import java.util.Scanner;
-
 public class Main {
+    public static final int REGISTER=1,LOG_IN=2,FINISH_THE_PROGRAM=3;
+
+
     public static void main(String[] args) {
         chooseOption();
 
@@ -18,10 +20,10 @@ public class Main {
             printMenu();
             choose = scanner.nextInt();
             switch (choose) {
-                case 1:
+                case REGISTER:
                     store.createUser();
                     break;
-                case 2:
+                case LOG_IN:
                     User user= store.login();
                     if (user.getUserName()==null) {
                         System.out.println("This user is not exist.");
@@ -33,7 +35,7 @@ public class Main {
                         }
                     }
                     break;
-                case 3:
+                case FINISH_THE_PROGRAM:
                     runLoop = false;
                     break;
                 default:

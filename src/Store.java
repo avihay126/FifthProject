@@ -9,7 +9,14 @@ public class Store {
     private Product[] products;
     private Cart[] carts;
 
-    public final int INITIAL_SIZE_ARRAY = 0, PASSWORD_MIN_SIZE = 6;
+    public final int INITIAL_SIZE_ARRAY = 0, PASSWORD_MIN_SIZE = 6,WORKER=1,COSTUMER=2,
+    REGULAR_WORKER=1,MANAGER=2,BOARD_MEMBER=3,FIRST_INDEX=0,COSTUMER_LIST=1,VIP_COSTUMER_LIST=2,
+    AT_LEAST_ONE_PURCHASE=3,HIGHEST_SUM_PURCHASE=4,ADD_PRODUCT=5,CHANGE_INVENTORY_STATUS=6,MAKING_PURCHASE=7,
+    LOG_OUT=8,START_NUMBERING=1,MIN_ONE_PURCHASE=1,MIN_DISCOUNT=0,MAX_DISCOUNT=1,FIRST_PRODUCT=1,
+    IN_STOCK=1,OUT_OF_STOCK=2,FINISH_THE_PURCHASE=-1,MIN_AMOUNT=1,HUNDRED_PERCENT=1,RISE_BY_ONE=1,RESET_AMOUNT=0;
+    public final char YES='Y',NO='N';
+    public final double REGULAR_WORKER_DISCOUNT=0.1,MANAGER_DISCOUNT=0.2,BOARD_MEMBER_DISCOUNT=0.3,MIN_PRICE=0;
+    public final boolean IS_IN_STOCK=true,IS_OUT_OF_STOCK=false;
 
     public Store() {
         this.users = new User[INITIAL_SIZE_ARRAY];
@@ -42,8 +49,8 @@ public class Store {
         do {
             System.out.println("1- Worker \n2- Costumer");
             choose = scanner.nextInt();
-        } while (choose < 1 || choose > 2);
-        if (choose == 1) {
+        } while (choose < WORKER || choose > COSTUMER);
+        if (choose == WORKER) {
             user = new Worker();
         } else {
             user = new Costumer();
@@ -109,19 +116,19 @@ public class Store {
                     "3- Board member: ");
             chosenRank = scanner.nextInt();
             switch (chosenRank) {
-                case 1:
+                case REGULAR_WORKER:
                     rank = "Regular worker";
                     break;
-                case 2:
+                case MANAGER:
                     rank = "Manager";
                     break;
-                case 3:
+                case BOARD_MEMBER:
                     rank = "Board member";
                     break;
                 default:
                     System.out.println("Invalid rank!");
             }
-        } while (chosenRank < 1 || chosenRank > 3);
+        } while (chosenRank < REGULAR_WORKER || chosenRank > BOARD_MEMBER);
         return rank;
     }
     private boolean isVip() {
@@ -130,9 +137,9 @@ public class Store {
         char chooseVip;
         do {
             System.out.println("Vip?\nY- Yes \nN- No ");
-            chooseVip = scanner.next().charAt(0);
-        } while (chooseVip != 'Y' && chooseVip != 'N');
-        if (chooseVip == 'Y') {
+            chooseVip = scanner.next().charAt(FIRST_INDEX);
+        } while (chooseVip != YES && chooseVip != NO);
+        if (chooseVip == YES) {
             isVip = true;
         }
         return isVip;
@@ -141,18 +148,17 @@ public class Store {
         double discount = 0;
         switch (rank) {
             case "Regular worker":
-                discount = 0.1;
+                discount = REGULAR_WORKER_DISCOUNT;
                 break;
             case "Manager":
-                discount = 0.2;
+                discount = MANAGER_DISCOUNT;
                 break;
             case "Board member":
-                discount = 0.3;
+                discount = BOARD_MEMBER_DISCOUNT;
                 break;
         }
         return discount;
     }
-
     public User login() {
         Scanner scanner = new Scanner(System.in);
         User user = workerOrCostumer();
@@ -170,6 +176,7 @@ public class Store {
         }
         return user;
     }
+
 
     public void loginToWorker(User user) {
         Worker worker=(Worker) user;
@@ -190,35 +197,34 @@ public class Store {
     }
     private void workerMenuChoose(User user) {
         Scanner scanner = new Scanner(System.in);
-        Costumer costumer = new Costumer();
         boolean runLoop = true;
         int choose;
         while (runLoop) {
             printWorkerMenu();
             choose = scanner.nextInt();
             switch (choose) {
-                case 1:
+                case COSTUMER_LIST:
                     printAllCostumers(this.users);
                     break;
-                case 2:
+                case VIP_COSTUMER_LIST:
                     printAllCostumers(onlyVip());
                     break;
-                case 3:
+                case AT_LEAST_ONE_PURCHASE:
                     printAllCostumers(atLeastOnePurchase());
                     break;
-                case 4:
+                case HIGHEST_SUM_PURCHASE:
                     highestSumPurchase();
                     break;
-                case 5:
+                case ADD_PRODUCT:
                     addProduct();
                     break;
-                case 6:
-                    changeStatusForProduct();
+                case CHANGE_INVENTORY_STATUS:
+                    changeStatusForProduct(this.products);
                     break;
-                case 7:
+                case MAKING_PURCHASE:
                     chooseProductToBuy(user);
                     break;
-                case 8:
+                case LOG_OUT:
                     runLoop = false;
                     break;
                 default:
@@ -229,7 +235,7 @@ public class Store {
     }
     private void printAllCostumers(User[] users) {
         if (!isEmptyArray(users)){
-            int numbering=1;
+            int numbering=START_NUMBERING;
             for (int i = 0; i < users.length; i++) {
                 if (users[i]!=null) {
                     System.out.println(numbering + "). " + users[i]+"\n---------------------------------");
@@ -255,7 +261,7 @@ public class Store {
         costumers= (User[]) copyArray(costumers,this.users);
         for (int i = 0; i < costumers.length; i++) {
             Costumer costumer=(Costumer) costumers[i];
-            if (costumer!=null&&costumer.getNumberOfPurchase() < 1) {
+            if (costumer!=null&&costumer.getNumberOfPurchase() < MIN_ONE_PURCHASE) {
                 costumers = (User[]) removeObjectFromArray(costumers, costumer);
                 i--;
             }
@@ -266,7 +272,7 @@ public class Store {
         User[] costumers = new User[this.users.length];
         costumers=(User[]) copyArray(costumers,this.users);
         if (!isEmptyArray(costumers)) {
-            Costumer costumer=(Costumer) costumers[0];
+            Costumer costumer=(Costumer) costumers[FIRST_INDEX];
             double highestSum = costumer.getSumPurchase();
             for (int i = 0; i < costumers.length; i++) {
                 Costumer currentCostumer=(Costumer) costumers[i];
@@ -286,18 +292,15 @@ public class Store {
         do {
             System.out.println("Enter price: ");
             price = scanner.nextDouble();
-        } while (price <= 0);
+        } while (price <= MIN_PRICE);
         do {
             System.out.println("Enter amount of discount for VIP: ");
             amountOfDiscount=scanner.nextDouble();
-        } while (amountOfDiscount<0||amountOfDiscount>1);
+        } while (amountOfDiscount<MIN_DISCOUNT||amountOfDiscount>MAX_DISCOUNT);
         Product product=new Product(productName,price,amountOfDiscount);
         this.products=(Product[]) addObjectToArray(product,this.products);
     }
-    private void changeStatusForProduct(){
-        chooseProductToChangeStatus(this.products);
-    }
-    private void chooseProductToChangeStatus(Product[] products) {
+    private void changeStatusForProduct(Product[] products) {
         Scanner scanner=new Scanner(System.in);
         boolean run=true;
         int choose;
@@ -305,26 +308,24 @@ public class Store {
         do {
             System.out.println("Select product: ");
             choose=scanner.nextInt();
-        }while (choose<1||choose>products.length);
+        }while (choose<FIRST_PRODUCT||choose>products.length);
         choose--;
         System.out.println("The product you choose to change status is: "+products[choose].getProductName()+"\n");
         int option=0;
         do {
             System.out.println("1- In stock.\n2- Out of stock.");
             option=scanner.nextInt();
-        }while (option<1||option>2);
-        if (option==1){
-            products[choose].setInStock(true);
+        }while (option<IN_STOCK||option>OUT_OF_STOCK);
+        if (option==IN_STOCK){
+            products[choose].setInStock(IS_IN_STOCK);
             System.out.println(products[choose].getProductName()+" get in stock");
 
         }else {
-            products[choose].setInStock(false);
+            products[choose].setInStock(IS_OUT_OF_STOCK);
             System.out.println(products[choose].getProductName()+" get out of stock");
         }
         System.out.println("-------------------------------");
     }
-
-
 
 
     public void loginToCostumer(User user) {
@@ -356,8 +357,8 @@ public class Store {
                 do {
                     System.out.println("Select a product to buy.\n-1. finish the purchase.");
                     choose = scanner.nextInt();
-                } while ((choose < 1 || choose > products.length) && (choose != -1));
-                if (choose == -1) {
+                } while ((choose < FIRST_PRODUCT || choose > products.length) && (choose != FINISH_THE_PURCHASE));
+                if (choose == FINISH_THE_PURCHASE) {
                     run=false;
                     finishPurchase(costumer,cart);
                 } else {
@@ -365,7 +366,7 @@ public class Store {
                     do {
                         System.out.println("Select amount: ");
                         amount=scanner.nextInt();
-                    }while (amount<1);
+                    }while (amount<MIN_AMOUNT);
                     products[choose].addAmount(amount);
                     if (!isProductAlreadyInCart(products[choose],cart)) {
                         cart.addProductToArray(products[choose]);
@@ -374,16 +375,13 @@ public class Store {
                     Product currentProduct=products[choose];
                     if (currentProduct.equals(products[choose])) {
                         if (costumer.isVip()) {
-                            totalPrice = ((currentProduct.getPrice() * (1 - currentProduct.getVipDiscount())) * amount);
+                            totalPrice = ((currentProduct.getPrice() * (HUNDRED_PERCENT - currentProduct.getVipDiscount())) * amount);
                         } else {
                             totalPrice = currentProduct.getPrice() * amount;
                         }
                         cart.addTotalPrice(totalPrice);
                     }
-
                     System.out.println(cart);
-
-
 
                 }
             }
@@ -406,10 +404,10 @@ public class Store {
         Calendar calendar= GregorianCalendar.getInstance();
         if (costumer instanceof Worker){
             Worker worker=(Worker) costumer;
-            cart.setTotalPrice(cart.getTotalPrice()*(1-worker.getAmountOfDiscount()));
+            cart.setTotalPrice(cart.getTotalPrice()*(HUNDRED_PERCENT-worker.getAmountOfDiscount()));
         }
-        costumer.setDateOfLstPurchase(calendar.getTime());
-        costumer.addNumberOfPurchase(1);
+        costumer.setDateOfLastPurchase(calendar.getTime());
+        costumer.addNumberOfPurchase(RISE_BY_ONE);
         System.out.println("The total price is "+cart.getTotalPrice()+"$\n---------------------" );
         costumer.addSumOfPurchase(cart.getTotalPrice());
         setAllProductAmountToZero(onlyAvailableProducts());
@@ -426,11 +424,9 @@ public class Store {
     }
     private void setAllProductAmountToZero(Product[] products){
         for (int i=0;i<products.length;i++){
-            products[i].setAmount(0);
+            products[i].setAmount(RESET_AMOUNT);
         }
     }
-
-
 
 
     private Product[] removeNullProducts(Product[] products){
@@ -456,7 +452,6 @@ public class Store {
         }
         return isEmpty;
     }
-
     private Object[] addObjectToArray(Object object, Object[] objects) {
         Object[] newArray = new Object[objects.length + 1];
         for (int i = 0; i < objects.length; i++) {
@@ -484,6 +479,4 @@ public class Store {
         }
         return objects1;
     }
-
-
 }

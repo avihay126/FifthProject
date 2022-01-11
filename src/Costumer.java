@@ -7,12 +7,15 @@ public class Costumer extends User implements PrintHello{
     private Date dateOfLastPurchase;
 
 
+    public final int INITIAL_SIZE=0;
+
+
 
     public Costumer(String firstName, String lastName, String userName, String password, boolean isVip) {
         super(firstName, lastName, userName, password);
         this.isVip=isVip;
-        this.numberOfPurchase=0;
-        this.sumPurchase=0;
+        this.numberOfPurchase=INITIAL_SIZE;
+        this.sumPurchase=INITIAL_SIZE;
 
     }
     public Costumer(){
@@ -47,11 +50,11 @@ public class Costumer extends User implements PrintHello{
     public void addSumOfPurchase(double sumToAdd){
         this.sumPurchase+=sumToAdd;
     }
-    public Date getDateOfLstPurchase() {
+    public Date getDateOfLastPurchase() {
         return dateOfLastPurchase;
     }
 
-    public void setDateOfLstPurchase(Date dateOfLstPurchase) {
+    public void setDateOfLastPurchase(Date dateOfLstPurchase) {
         this.dateOfLastPurchase = dateOfLstPurchase;
     }
 

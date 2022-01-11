@@ -4,10 +4,12 @@ public class Cart {
     private User user;
     private double totalPrice;
 
+    public final int INITIAL_SIZE=0;
+
     public Cart(User user) {
         this.user = user;
-        this.products=new Product[0];
-        this.totalPrice=0;
+        this.products=new Product[INITIAL_SIZE];
+        this.totalPrice=INITIAL_SIZE;
     }
     public void addProductToArray(Product product){
         Product[] newArray=new Product[this.products.length+1];
@@ -19,7 +21,7 @@ public class Cart {
     }
 
     public double getTotalPrice() {
-        return totalPrice;
+        return this.totalPrice;
     }
     public void addTotalPrice(double price){
         this.totalPrice+=price;
@@ -30,7 +32,7 @@ public class Cart {
     }
 
     public Product[] getProducts() {
-        return products;
+        return this.products;
     }
 
     public void setProducts(Product[] products) {
@@ -38,7 +40,7 @@ public class Cart {
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public void setUser(User user) {

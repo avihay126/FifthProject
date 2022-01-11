@@ -4,6 +4,7 @@ public class Product {
     private boolean isInStock;
     private double vipDiscount;
     private int amountInCart;
+    public static final int CHANGE_T0_PERCENT=100;
 
     public Product(String productName, double price,double vipDiscount) {
         this.productName = productName;
@@ -57,6 +58,6 @@ public class Product {
     }
 
     public String toString(){
-        return this.productName+", "+this.price+"$. "+this.vipDiscount*100+"% (VIP)| ";
+        return this.productName+", "+this.price+"$. "+this.vipDiscount*CHANGE_T0_PERCENT+"% (VIP)| ";
     }
 }
