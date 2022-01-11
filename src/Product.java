@@ -3,7 +3,7 @@ public class Product {
     private double price;
     private boolean isInStock;
     private double vipDiscount;
-    private int amount;
+    private int amountInCart;
 
     public Product(String productName, double price,double vipDiscount) {
         this.productName = productName;
@@ -14,14 +14,14 @@ public class Product {
     }
 
     public int getAmount() {
-        return amount;
+        return this.amountInCart;
     }
 
     public void setAmount(int amount) {
-        this.amount = amount;
+        this.amountInCart = amount;
     }
     public void addAmount(int amount){
-        this.amount+=amount;
+        this.amountInCart +=amount;
     }
 
     public String getProductName() {
@@ -57,6 +57,6 @@ public class Product {
     }
 
     public String toString(){
-        return this.productName+", "+this.price+"$.";
+        return this.productName+", "+this.price+"$. "+this.vipDiscount*100+"% (VIP)| ";
     }
 }

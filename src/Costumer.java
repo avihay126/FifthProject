@@ -38,13 +38,13 @@ public class Costumer extends User implements PrintHello{
         this.numberOfPurchase+=numberOfPurchaseToAdd;
     }
     public double getSumPurchase() {
-        return sumPurchase;
+        return this.sumPurchase;
     }
 
     public void setSumPurchase(double sumPurchase) {
         this.sumPurchase = sumPurchase;
     }
-    public void addSumOfPurchase(int sumToAdd){
+    public void addSumOfPurchase(double sumToAdd){
         this.sumPurchase+=sumToAdd;
     }
     public Date getDateOfLstPurchase() {
@@ -63,7 +63,7 @@ public class Costumer extends User implements PrintHello{
     public String toString(){
         return super.toString()+(this.isVip? " (VIP)":". ")+"\n" +
                 "Number of purchases: "+this.numberOfPurchase+"\n" +
-                "Sum of all purchases: "+this.sumPurchase+"\n" +
+                "Sum of all purchases: "+this.sumPurchase+"$\n" +
                 "Last purchase date: "+this.dateOfLastPurchase;
     }
 }

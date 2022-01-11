@@ -49,7 +49,7 @@ public class Cart {
         StringBuilder output=new StringBuilder();
         for (int i=0;i<this.products.length;i++){
             output.append(i+1).append("- ").append(this.products[i]).append(" "+this.products[i].getAmount()+".\n");
-         //   this.totalPrice+=this.products[i].getPrice()*this.products[i].getAmount();
+
         }
         return "Cart info:\n"+output.toString()+"\nTotal price: "+this.totalPrice+"$";
     }

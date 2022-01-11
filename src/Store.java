@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 public class Store {
@@ -33,7 +35,6 @@ public class Store {
 
         }
     }
-
     private User workerOrCostumer() {
         Scanner scanner = new Scanner(System.in);
         User user;
@@ -49,7 +50,6 @@ public class Store {
         }
         return user;
     }
-
     private String name(String print) {
         Scanner scanner = new Scanner(System.in);
         String name;
@@ -59,7 +59,6 @@ public class Store {
         } while (!isString(name));
         return name;
     }
-
     private boolean isString(String str) {
         boolean flag = true;
         for (int i = 0; i < str.length(); i++) {
@@ -70,7 +69,6 @@ public class Store {
         }
         return flag;
     }
-
     private String userName() {
         Scanner scanner = new Scanner(System.in);
         String userName;
@@ -80,7 +78,6 @@ public class Store {
         } while (userNameExist(userName));
         return userName;
     }
-
     private boolean userNameExist(String userName) {
         boolean isExist = false;
         for (int i = 0; i < this.users.length; i++) {
@@ -92,7 +89,6 @@ public class Store {
         }
         return isExist;
     }
-
     private String password() {
         Scanner scanner = new Scanner(System.in);
         String password;
@@ -102,7 +98,6 @@ public class Store {
         } while (password.length() < PASSWORD_MIN_SIZE);
         return password;
     }
-
     private String workerRank() {
         Scanner scanner = new Scanner(System.in);
         String rank = null;
@@ -129,7 +124,6 @@ public class Store {
         } while (chosenRank < 1 || chosenRank > 3);
         return rank;
     }
-
     private boolean isVip() {
         Scanner scanner = new Scanner(System.in);
         boolean isVip = false;
@@ -143,7 +137,6 @@ public class Store {
         }
         return isVip;
     }
-
     private double workerDiscount(String rank) {
         double discount = 0;
         switch (rank) {
@@ -188,13 +181,13 @@ public class Store {
         System.out.println("1- Costumer list: \n" +
                 "2- VIP costumer list: \n" +
                 "3- Costumer who have made at least one purchase: \n" +
-                "4- Costumer with the highest amount of purchase: \n" +
+                "4- Costumer with the highest sum of purchase: \n" +
                 "5- Adding a new product: \n" +
                 "6- Change inventory status fo product: \n" +
                 "7- Making a purchase: \n" +
-                "8- Log out: ");
+                "8- Log out: \n" +
+                "------------------------------------");
     }
-
     private void workerMenuChoose(User user) {
         Scanner scanner = new Scanner(System.in);
         Costumer costumer = new Costumer();
@@ -223,6 +216,7 @@ public class Store {
                     changeStatusForProduct();
                     break;
                 case 7:
+                    chooseProductToBuy(user);
                     break;
                 case 8:
                     runLoop = false;
@@ -233,22 +227,18 @@ public class Store {
             }
         }
     }
-
     private void printAllCostumers(User[] users) {
-        if (users.length==0||users[0]==null){
-            System.out.println("There are no costumers in the system.\n");
-        }else {
+        if (!isEmptyArray(users)){
             int numbering=1;
             for (int i = 0; i < users.length; i++) {
                 if (users[i]!=null) {
-                    System.out.println(numbering + "- " + users[i]);
+                    System.out.println(numbering + "). " + users[i]+"\n---------------------------------");
                     numbering++;
                 }
             }
         }
 
     }
-
     private User[] onlyVip() {
         User[] costumers = new User[this.users.length];
         costumers= (User[]) copyArray(costumers,this.users);
@@ -260,7 +250,6 @@ public class Store {
         }
         return costumers;
     }
-
     private User[] atLeastOnePurchase() {
         User[] costumers = new User[this.users.length];
         costumers= (User[]) copyArray(costumers,this.users);
@@ -273,24 +262,22 @@ public class Store {
         }
         return costumers;
     }
-
     private void highestSumPurchase() {
-        User[] costumers =  this.users;
-        if (costumers.length == 0) {
-            System.out.println("There are no costumers in the system.\n");
-        } else {
+        User[] costumers = new User[this.users.length];
+        costumers=(User[]) copyArray(costumers,this.users);
+        if (!isEmptyArray(costumers)) {
             Costumer costumer=(Costumer) costumers[0];
             double highestSum = costumer.getSumPurchase();
             for (int i = 0; i < costumers.length; i++) {
-                if (costumer.getSumPurchase() > highestSum) {
-                    highestSum = costumer.getSumPurchase();
-                    costumer =(Costumer) costumers[i];
+                Costumer currentCostumer=(Costumer) costumers[i];
+                if (currentCostumer.getSumPurchase() > highestSum) {
+                    highestSum = currentCostumer.getSumPurchase();
+                    costumer = currentCostumer;
                 }
             }
-            System.out.println("The costumer with the highest sum purchase is: " + costumer+" "+costumer.getSumPurchase()+"$");
+            System.out.println("The highest sum purchase is: "+costumer.getSumPurchase()+"$\nThe Costumer is: " + costumer+" \n");
         }
     }
-
     private void addProduct() {
         Scanner scanner = new Scanner(System.in);
         String productName = name("Product name: ");
@@ -328,9 +315,13 @@ public class Store {
         }while (option<1||option>2);
         if (option==1){
             products[choose].setInStock(true);
+            System.out.println(products[choose].getProductName()+" get in stock");
+
         }else {
             products[choose].setInStock(false);
+            System.out.println(products[choose].getProductName()+" get out of stock");
         }
+        System.out.println("-------------------------------");
     }
 
 
@@ -344,9 +335,7 @@ public class Store {
     }
 
     private void printProducts(Product [] products){
-        if (products.length==0||products[0]==null){
-            System.out.println("There is no products in the system.\n");
-        }else {
+        if (!isEmptyArray(products)) {
             for (int i=0;i<products.length;i++){
                 if (products[i]!=null)
                 System.out.println(i+1+"- "+products[i]);
@@ -354,24 +343,119 @@ public class Store {
         }
     }
     private void chooseProductToBuy(User user){
+        Costumer costumer=(Costumer) user;
         Scanner scanner=new Scanner(System.in);
-        printProducts(onlyAvailableProducts());
-    }
+        boolean run=true;
+        int choose;
+        int amount=0;
+        Product[] products = onlyAvailableProducts();
+        if (!isEmptyArray(products)) {
+            Cart cart= new Cart(costumer);
+            while (run) {
+                printProducts(products);
+                do {
+                    System.out.println("Select a product to buy.\n-1. finish the purchase.");
+                    choose = scanner.nextInt();
+                } while ((choose < 1 || choose > products.length) && (choose != -1));
+                if (choose == -1) {
+                    run=false;
+                    finishPurchase(costumer,cart);
+                } else {
+                    choose--;
+                    do {
+                        System.out.println("Select amount: ");
+                        amount=scanner.nextInt();
+                    }while (amount<1);
+                    products[choose].addAmount(amount);
+                    if (!isProductAlreadyInCart(products[choose],cart)) {
+                        cart.addProductToArray(products[choose]);
+                    }
+                    double totalPrice=0;
+                    Product currentProduct=products[choose];
+                    if (currentProduct.equals(products[choose])) {
+                        if (costumer.isVip()) {
+                            totalPrice = ((currentProduct.getPrice() * (1 - currentProduct.getVipDiscount())) * amount);
+                        } else {
+                            totalPrice = currentProduct.getPrice() * amount;
+                        }
+                        cart.addTotalPrice(totalPrice);
+                    }
 
+                    System.out.println(cart);
+
+
+
+                }
+            }
+        }
+
+    }
     private Product[] onlyAvailableProducts() {
         Product[] availableProducts=new Product[this.products.length];
         availableProducts= (Product[]) copyArray(availableProducts,this.products);
         for (int i=0;i<availableProducts.length;i++){
             if (availableProducts[i]!=null&&!availableProducts[i].isInStock()){
                 availableProducts= (Product[]) removeObjectFromArray(availableProducts,availableProducts[i]);
+                i--;
             }
         }
+        availableProducts=removeNullProducts(availableProducts);
         return availableProducts;
+    }
+    private void finishPurchase(Costumer costumer,Cart cart){
+        Calendar calendar= GregorianCalendar.getInstance();
+        if (costumer instanceof Worker){
+            Worker worker=(Worker) costumer;
+            cart.setTotalPrice(cart.getTotalPrice()*(1-worker.getAmountOfDiscount()));
+        }
+        costumer.setDateOfLstPurchase(calendar.getTime());
+        costumer.addNumberOfPurchase(1);
+        System.out.println("The total price is "+cart.getTotalPrice()+"$\n---------------------" );
+        costumer.addSumOfPurchase(cart.getTotalPrice());
+        setAllProductAmountToZero(onlyAvailableProducts());
+    }
+    private boolean isProductAlreadyInCart(Product product,Cart cart){
+        boolean alreadyExistInCart=false;
+        for (int i=0;i<cart.getProducts().length;i++){
+            if (product.getProductName().equals(cart.getProducts()[i].getProductName())){
+                alreadyExistInCart=true;
+                break;
+            }
+        }
+        return alreadyExistInCart;
+    }
+    private void setAllProductAmountToZero(Product[] products){
+        for (int i=0;i<products.length;i++){
+            products[i].setAmount(0);
+        }
     }
 
 
 
 
+    private Product[] removeNullProducts(Product[] products){
+        Product[] newArray=new Product[products.length];
+        int indexNewArray=0;
+        for (int i=0;i<products.length;i++){
+            if (products[i]!=null){
+                newArray[indexNewArray]=products[i];
+                indexNewArray++;
+            }
+        }
+        Product[] retArray= new Product[indexNewArray];
+        for (int i=0;i<retArray.length;i++){
+            retArray[i]=newArray[i];
+        }
+        return retArray;
+    }
+    private boolean isEmptyArray(Object[] objects){
+        boolean isEmpty=false;
+        if (objects.length==0||objects[0]==null){
+            System.out.println("There are no suitable details to display.\n-------------------------------");
+            isEmpty=true;
+        }
+        return isEmpty;
+    }
 
     private Object[] addObjectToArray(Object object, Object[] objects) {
         Object[] newArray = new Object[objects.length + 1];
@@ -382,7 +466,6 @@ public class Store {
         newArray = Arrays.asList(newArray).toArray(objects);
         return newArray;
     }
-
     private Object[] removeObjectFromArray(Object[] objects, Object object) {
         Object[] newArray = new Object[objects.length - 1];
         int indexNewArray = 0;
@@ -404,27 +487,3 @@ public class Store {
 
 
 }
-//        Scanner scanner = new Scanner(System.in);
-//        boolean run = true;
-//        int choose;
-//        Cart cart = new Cart(user);
-//        while (run) {
-//        Product[] availableProducts = (Product[]) printAvailableProduct();
-//        do {
-//        System.out.println("Select a product to purchase,\n-1 to finish");
-//        choose = scanner.nextInt();
-//        } while (choose != -1 && (choose < 0 || choose > availableProducts.length));
-//        if (choose == -1) {
-//        run = false;
-//        System.out.println("The total price is" + cart.getTotalPrice() + "$");
-//        } else {
-//        choose--;
-//        int numberOfProducts;
-//        do {
-//        System.out.println("Select number of products.");
-//        numberOfProducts = scanner.nextInt();
-//        } while (numberOfProducts <= 0);
-//        availableProducts[choose].addAmount(numberOfProducts);
-//        cart.addProductToArray(availableProducts[choose]);
-//        cart.addTotalPrice(cart.getTotalPrice() + (numberOfProducts * availableProducts[choose].getPrice()));
-//        System.out.println(cart);

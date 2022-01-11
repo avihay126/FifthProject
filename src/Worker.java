@@ -26,7 +26,7 @@ public class Worker extends Costumer implements PrintHello{
         this.amountOfDiscount = amountOfDiscount;
     }
     public void printHello(){
-        System.out.println("Hello "+getFirstName()+" "+getLastName()+" ("+this.rank+")!");
+        System.out.println("Hello "+getFirstName()+" "+getLastName()+" ("+this.rank+")!\n");
     }
 
     public String toString(){
